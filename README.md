@@ -2,13 +2,20 @@
 
 A practical guide.
 
-## The C++ Standard Library
+## The C++ Standard Library is not the STL
 The C++ Standard Library, or stdlib, is based on the old-school STL's (or Standard Template
 Library) conventions. The library is currently part of the ISO standard of C++,
 so it's easy to use.
+[Stack Overflow](http://stackoverflow.com/questions/5205491/whats-the-difference-between-stl-and-c-standard-library)
 
-### Why Use It? Performance.
-The C++ Standard Library has performance requirements. For example, C++ std::sort() is guaranteed worst case O(n log n), whereas C's qsort() is based on a variation of Quicksort, which is worst case O(n<sup>2</sup>).
+### Why Use It? Performant. Fewer failure points. Robust. Efficient.
+The C++ Standard Library has performance requirements, and it's a tested, proven and efficient way to write robust code and avoid re-inventing the wheel for different data types and situations. Just about everyone using C++ today uses stdlib.
+[Stack Overflow](http://stackoverflow.com/questions/4764325/c-standard-library-when-should-i-use-it-and-when-shouldnt-i)
+
+It's performant.
+
+ For example, C++ std::sort() is guaranteed worst case O(n log n), whereas C's qsort() is based on a variation of Quicksort, which is worst case O(n<sup>2</sup>).
+
 
 ### Why Use It? Generics.
 The C++ Standard Library has generics and containers similar to Java Collections, including iterators, to handle multiple container types with safe operations and an API of sorts that's easy to remember.
