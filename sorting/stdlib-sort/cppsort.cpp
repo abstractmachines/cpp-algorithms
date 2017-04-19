@@ -67,22 +67,22 @@ void print(std::array<int, RANGE> arr)
 
 int main ()
 {
-	std::array<int, RANGE> arr = {5,4,7,9,0,1,2,3,8,6};
+	const std::array<int, RANGE> arr = {5,4,7,9,0,1,2,3,8,6};
+	std::array<int, RANGE> arrMut; //const;
 
 	std::cout<<"\nUnsorted Array: \n\n";
-
 	print(arr);
 
-	arr = sortAscend(arr);
+	arrMut = sortAscend(arr);
+	print(arrMut);
 
-	print(arr);
+	arrMut = sortDescend(arr);
+	print(arrMut);
 
-	arr = sortDescend(arr);
+	arrMut = sortDescendBool(arr);
+	print(arrMut);
 
-	print(arr);
-
-	arr = sortDescendBool(arr);
-
+	std::cout<<"\n\nUnsorted Array: \n\n";
 	print(arr);
 
 	return 0;
