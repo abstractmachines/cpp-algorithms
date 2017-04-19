@@ -19,14 +19,27 @@ See also:
 - [C++ Containers Library](http://en.cppreference.com/w/cpp/container)
 
 
-### Usage (don't pollute the global namespace)
-Including the standard namespace (not recommended, due to pollution of global
+### Usage
+
+#### Namespace use
+
+**Option 1:**
+
+Including the stdlib namespace, globally (not recommended, due to pollution of global
 	namespace):
+
 `using namespace std;`
 
-Or, namespacing each std:: use (recommended as it reduces pollution of the
-	global namespace):
-`std::stuff;`
+**Option 2:**
+
+Prefixing each use with proper scoping namespace (recommended):
+
+```
+std::something;
+std:anotherthing;
+```
+
+#### Namespace use
 
 
 
