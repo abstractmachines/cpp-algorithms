@@ -33,13 +33,13 @@ Or, namespacing each std:: use (recommended as it reduces pollution of the
 ### Algorithmic Complexity Table
 
 
-| Time          | Notation           | Notes            |
-| ------------- |:-------------:| ---------------------:|
-| Constant Time | O(1)| Best.** Doesn't rely on input. |
-| Logarithmic Time   |  O(log n)| Really good; logarithms are small. |
+| Time          | Notation              | Notes            |
+| ---------------- |:------------------:| ---------------------:|
+| Constant Time    | O(1)               | Best.** Doesn't rely on input. |
+| Logarithmic Time | O(log n)           | Really good; logarithms are small. |
 | Linearithmic Time _where log n < 1_   |  O(n log n)  | Smaller than n. |
-| Linear Time   |  O(n)| Not bad for small data; proportionate to n. |
-| Linearithmic Time _where log n > 1_  |  O(n log n)  | Larger than n. |
-| Exponential Time   |  O(n<sup>2</sup>)| Terrible; an exponential curve. |
-| Power of 2   |  O(2<sup>n</sup>)| Even worse than exponential. |
-| Bad Stuff   |  O(n 2<sup>n</sup>)| Nooooo. |
+| Linear Time      | O(n)               | Not bad for small data; proportionate to n. |
+| Linearithmic Time _where log n > 1_   |  O(n log n)  | Larger than n. |
+| Exponential Time | O(n<sup>2</sup>)   | Terrible; an exponential curve. |
+| Power of 2       |  O(2<sup>n</sup>)  | Even worse than exponential. |
+| Bad Stuff        |  O(n 2<sup>n</sup>)| Nooooo. |
