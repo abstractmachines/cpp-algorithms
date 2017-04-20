@@ -3,9 +3,9 @@
 sort in ascending order.
 
 Compile with C++11 option
-$ g++ cppsort.cpp -std=c+=11
+$ g++ cppsort.cpp -std=c++11
 
-See also: stricter ordering such as
+See also: stricter ordering, std::less, etc.
 */
 
 #include <algorithm>
@@ -57,33 +57,45 @@ std::array<int, RANGE> sortDescendBool(std::array<int, RANGE> arr)
 	return arr;
 };
 
-void print(std::array<int, RANGE> arr)
+/* print with std::iterator instead of auto syntax
+*/
+void printIterator(std::array<int, RANGE> arr)
 {
-	for(auto a:arr)
+	std::array<int, RANGE>::iterator it;
+	for(it = arr.begin(); it != arr.end(); ++it)
 	{
-		std::cout << a << " ";
+		std::cout << *it << " ";
+	}
+}
+/* print with simplified syntax using auto C++ type deduction
+*/
+void printAuto(std::array<int, RANGE> arr)
+{
+	for(auto it:arr)
+	{
+		std::cout << it << " ";
 	}
 }
 
 int main ()
 {
 	const std::array<int, RANGE> arr = {5,4,7,9,0,1,2,3,8,6};
-	std::array<int, RANGE> arrMut; //const;
+	std::array<int, RANGE> arrMut;
 
 	std::cout<<"\nUnsorted Array: \n\n";
-	print(arr);
+	printIterator(arr);
 
 	arrMut = sortAscend(arr);
-	print(arrMut);
+	printAuto(arrMut);
 
 	arrMut = sortDescend(arr);
-	print(arrMut);
+	printAuto(arrMut);
 
 	arrMut = sortDescendBool(arr);
-	print(arrMut);
+	printAuto(arrMut);
 
 	std::cout<<"\n\nUnsorted Array: \n\n";
-	print(arr);
+	printAuto(arr);
 
 	return 0;
 }
