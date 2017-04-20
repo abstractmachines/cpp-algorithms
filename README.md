@@ -2,10 +2,12 @@
 
 A practical guide.
 
-## The C++ Standard Library is not the STL
-The C++ Standard Library, or stdlib, is based on the old-school STL's (or Standard Template
-Library) conventions. The library is currently part of the ISO standard of C++,
+## The C++ Standard Library and the STL
+The C++ Standard Library, or stdlib, is based on the STL's (or Standard Template Library) conventions. The STL 
+
+The library is currently part of the ISO standard of C++,
 so it's easy to use.
+
 [Stack Overflow](http://stackoverflow.com/questions/5205491/whats-the-difference-between-stl-and-c-standard-library)
 
 ### Why Use It? Performant. Fewer failure points. Robust. Efficient.

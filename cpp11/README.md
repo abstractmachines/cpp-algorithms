@@ -5,15 +5,65 @@ We will be using C++11 and the C++ Standard Library for our algorithms.
 This section includes information on how to use modern C++ for algorithm
 problem solving.
 
-## Assertions versus Exceptions and error handling : When to use
+## Use the containers
 
-**Exceptions and error handling are for situations in which control flow
+Don't use strcpy() or strncpy(), use std::container.copy().
+
+Don't use conditionals if nullptr, use std::container.empty().
+
+### Use emplace over append
+See Perfect Forwarding and Modern C++ by Scott Meyers.
+
+## Use smart pointers instead of "new" whenever possible
+
+In modern C++, we don't really use the "new" keyword very often. Instead, we
+use smart pointers, because they're easier to manage and don't require as much
+manual memory management. Raw pointers are the kinds of pointers we learned in CS101 coursework: manually managed memory (new, malloc, delete, etc). Other
+pointers that aren't "raw" are considered "smart" pointers, which "smartly
+manage themselves" via constructs automating memory management for them.
+
+### auto-ptr is deprecated
+`auto_ptr`, in existence prior to C++11, should not be used in C++ Standard
+Library std:: containers. That's because unless very carefully handled,
+auto_ptrs leak memory. They have problematic copy semantics, and a problematic
+copy constructor (recall the [C++ Rule of Three](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming))).
+
+Speaking of copy semantics, an article on modern C++ and **Move Semantics** is
+included here [from Stack Overflow](http://stackoverflow.com/questions/3106110/what-are-move-semantics).
+It also covers information on L-Values and R-Values.
+
+
+These topics all relate to pointers regarding **access.** With inter-process communication (IPC) and inter-thread communication, controlled access is important for critical code sections / critical paths in order to avoid race conditions, so tools such as locks, mutexes, and semaphores are used to control access. I won't be covering most of that information here.
+
+
+| Pointer Type     | Memory management / access  | Notes |
+| ---------------- |:--------------------------:|
+| **Raw**              | Manually                               | malloc, free, new, delete |
+| **Unique (smart)**   | Self-managed via ownership relationships  | A unique pointer cannot be shared, it can be "moved." That's how ownership is transferred. _std::unique_  _std::move()_ |
+| **Shared (smart)**   | Self-managed via shared ownership and reference counting  | Many shared pointers can own one object. Atomic std:: ref counts.  _std::shared__ptr_  _make__shared()_|
+| **Weak (smart)**   | Holds weak (non ownership) reference to shared_ptr's object  | For object tracking; must be converted to shared pointer to access object.  _std::weak__ptr_ |
+
+Some good references:
+
+- [University of Michigan PDF: C++ Smart Pointers](http://umich.edu/~eecs381/handouts/C++11_smart_ptrs.pdf)
+
+- [Eli Bendersky](http://eli.thegreenplace.net/2012/06/20/c11-using-unique_ptr-with-standard-library-containers)
+
+
+## Assertions, Exceptions, Error Codes
+
+### Use assertions minimally
+Exceptions and error handling are for situations in which control flow
 interruptions are minimized and in which control flow happens as smoothly
-as possible. Recovery - or reporting errors nicely to user - is the goal.**
-
-**Assertions crash your program.**
+as possible. Recovery - or reporting errors nicely to user - is the goal. **Assertions crash your program.**
 
 Assertions are used to check that a program or API is operating properly.
+
+### Use Exceptions for high-level use cases
+Logic errors, etc. Exceptions unwind the stack.
+
+### Use Error Codes for low-level use cases (see "the exception that crashed an airline")
+Error codes are commonly used in C and COM programming for explicit handling of "every" possible situation, and detail-oriented low-level reporting. Error codes are an integer data type. Many C and COM programs also use globals to check error status after every function invocation and check it against the last stack push.
 
 ## Strings and streams
 
@@ -131,3 +181,66 @@ What: Objects can appear unchanged externally and be somewhat opaque, as impleme
 How: **Member variables** declared with the `mutable keyword`.
 
 Member variables declared with the `mutable keyword` can be altered in const member functions!
+
+## Casting
+There are several types of casting:
+- C style casting
+- Static casting
+- Dynamic casting
+- Const casting
+
+### Casting is "full duplex"
+
+Casting can go from derived class to base class (intuitively clear), and also
+from base class to derived class (less intuitive).
+
+What is the difference between static and dynamic casting?
+>Casting Review: Static and Dynamic casting:
+Well, think about the names of those things. "Static" means at compile time, and "dynamic" means at run time. Now, what is casting? It's type changing. So, dynamic, type changes, means: determined latently - i.e. at runtime. And static means determined at compile time.
+
+So, use static when you know the type, or can easily get the type. Use dynamic when it's inconvenient to do so.
+
+### Code Samples
+#### Static Casting
+```
+int staticCast(double d)
+{
+	int x = static_cast<int> (d);
+	return x;
+}
+
+// main() :
+char charToCast = 'z';
+
+cout << typeid(charToCast).name(); // c (for char) <typeinfo>
+cout << charToCast;                // z
+
+int nowAnInt = cCast(charToCast);
+
+cout << typeid(nowAnInt).name(); // i (for integer) <typeinfo>
+cout << nowAnInt;                // 42
+```
+
+#### Dynamic Casting
+
+
+#### C Style Casting
+```
+int cCast(char c)
+{
+	int n = 42;
+	c = ( char ) n; // or c = char ( n )
+
+	return c;
+}
+
+// main():
+double doubleToCast = 3.14;
+cout << typeid(doubleToCast).name(); // d (for double) <typeinfo>
+cout << doubleToCast;                // 3.14
+
+int nowAnInt = staticCast(doubleToCast);
+
+cout << typeid(nowAnInt).name(); // i (for integer) <typeinfo>
+cout << nowAnInt;                // 3 (truncates)
+```
