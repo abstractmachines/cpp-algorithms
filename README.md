@@ -3,7 +3,7 @@
 A practical guide.
 
 ## The C++ Standard Library and the STL
-The C++ Standard Library, or stdlib, is based on the STL's (or Standard Template Library) conventions. The STL 
+The C++ Standard Library, or stdlib, is based on the STL's (or Standard Template Library) conventions. The STL
 
 The library is currently part of the ISO standard of C++,
 so it's easy to use.
@@ -47,10 +47,6 @@ Prefixing each use with proper scoping namespace (recommended):
 std::something;
 std:anotherthing;
 ```
-
-#### Namespace use
-
-
 
 ### Algorithmic Complexity Table
 

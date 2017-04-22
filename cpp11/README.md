@@ -22,7 +22,7 @@ manual memory management. Raw pointers are the kinds of pointers we learned in C
 pointers that aren't "raw" are considered "smart" pointers, which "smartly
 manage themselves" via constructs automating memory management for them.
 
-### auto-ptr is deprecated
+### auto_ptr is deprecated
 `auto_ptr`, in existence prior to C++11, should not be used in C++ Standard
 Library std:: containers. That's because unless very carefully handled,
 auto_ptrs leak memory. They have problematic copy semantics, and a problematic
@@ -50,20 +50,70 @@ Some good references:
 - [Eli Bendersky](http://eli.thegreenplace.net/2012/06/20/c11-using-unique_ptr-with-standard-library-containers)
 
 
-## Assertions, Exceptions, Error Codes
+## Exceptions, Error Codes, Assertions
 
-### Use assertions minimally
+### Exceptions and error codes: recovery/continuation is desired
 Exceptions and error handling are for situations in which control flow
 interruptions are minimized and in which control flow happens as smoothly
-as possible. Recovery - or reporting errors nicely to user - is the goal. **Assertions crash your program.**
+as possible. Recovery - or reporting errors nicely to user - is the goal.
 
-Assertions are used to check that a program or API is operating properly.
+### Assertions : debugging tool to ensure program is running properly
+Not a production-code construct. Used for debugging to tell whether the
+program is running properly.
+
+**Assert stops execution at the statement, for debugging.
+Exceptions stop execution at the handler.**
 
 ### Use Exceptions for high-level use cases
 Logic errors, etc. Exceptions unwind the stack.
 
-### Use Error Codes for low-level use cases (see "the exception that crashed an airline")
-Error codes are commonly used in C and COM programming for explicit handling of "every" possible situation, and detail-oriented low-level reporting. Error codes are an integer data type. Many C and COM programs also use globals to check error status after every function invocation and check it against the last stack push.
+##### Problems with exceptions: raw pointers and delete
+Since exceptions alter the program control flow and using delete often depends
+on a particular fall-through/control flow, delete may never get called if an
+exception is caught and handled _before that delete can be called._
+
+All the more justification for not using raw pointers. **Use smart pointers. And if you do have to call delete, call it in a destructor.**
+
+##### Exception use cases
+- Thing happens -> exception handled -> recover, continue execution, or stop
+- Run time error conditions  
+- "Out of memory"
+- "File not Found"
+- "Wrong data type entered"
+- Always check arguments to public functions with exceptions
+
+##### Exception best practices
+- If you create your own class, inherit from std::exception. Study the
+UML diagrams for std::exception. [cpp reference](http://en.cppreference.com/w/cpp/error/exception)
+[tutorials point](https://www.tutorialspoint.com/cplusplus/cpp_exceptions_handling.htm)
+- You can throw bare integers or arrays but it's considered bad style; instead, throw some variation of std::exception.
+- If you absolutely have to use raw pointers, follow best practices and
+place delete calls in the destructor.
+-
+
+
+### Use Error Codes for low-level system use cases requiring granularity
+Error codes are commonly used in C and COM programming for explicit handling of "every" possible situation, and detail-oriented low-level reporting.  Error codes return an integer data type. `"Exit 0" success` and `"Exit 1"  failure` are integer error codes that low level/Linux systems programmers are accustomed to seeing.
+
+Many C and COM programs also use globals to check error status after every function invocation and check it against the last stack push.
+
+Sometimes exceptions aren't always the answer (see "the exception that crashed an airline").
+
+##### Error code use cases
+- Low level system calls return a type of abort/trap, and we want to know
+exactly what occurred
+- Distributed systems bus messages and statuses
+- Wrong protocol / handshake
+- Need full duplex, but only half duplex, etc (just an example)
+
+### Use Assertions for debugging
+
+#### Assertion use cases
+- Debugging (not production)
+- Assertions are used to check that things are operating properly.
+- API / network not available
+- Logic error in code
+
 
 ## Strings and streams
 
@@ -222,7 +272,13 @@ cout << nowAnInt;                // 42
 ```
 
 #### Dynamic Casting
+TODO:  more on this soon
 
+Notes of things to cover:
+- polymorphism
+- void pointers, function pointers
+- RTTI Run Time Type Identification,
+- latent/late/runtime
 
 #### C Style Casting
 ```

@@ -13,8 +13,6 @@ Integer is assigned: 2.assert(x == 42).Abort trap: 6
 
 */
 
-
-
 #include <iostream>
 #include <assert.h>
 
