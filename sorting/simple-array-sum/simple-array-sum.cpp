@@ -23,26 +23,53 @@ int main() {
 
 		std::cout<<"\n\nEnter individual numbers... then hit EOF to stop.\n\n";
 
-		if(!std::cin>>input)
-		{
-			std::cout<<"\n\nInvalid input.\n\n";
-		}
-		else
-		{
-			std::cout<<"\n\nOK, valid input.\n\n";
+		bool getBetterInput = true;
 
+		while(getBetterInput == true)
+		{
 			while(std::cin >> input)
 			{
-
+				if(std::cin.fail())
+				{
+					std::cout<<"\n\ncin.fail() happened.\n\n";
+					std::cin.clear();
+					std::cin.ignore(1000,'\n');
+				}
+				else
+				{
 					v.push_back(input);
+					getBetterInput = false;
+				}
 			}
-			for(it = v.begin(); it != v.end();++it)
+
+			//Option 1: instead of using an iterator: This runs
+			// for(it = v.begin(); it != v.end();++it)
+			// {
+			// 		count += *it;
+			// }
+
+			//Option 2: use auto: This runs. (Comment out Option 1.)
+			for(auto x:v)
 			{
-					count += *it;
+					count += x;
 			}
+
+			// Option 3: use a std::accumulator to accumulate (3 args)
+
+
 
 			std::cout<< count;
+
 		}
+
+		// if(!std::cin>>input)
+		// {
+		// 	std::cout<<"\n\nInvalid input.\n\n";
+		// }
+		// else
+		// {
+		// 	std::cout<<"\n\nOK, valid input.\n\n";
+		// }
 
 
 		return 0;

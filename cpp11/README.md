@@ -18,7 +18,8 @@ See Perfect Forwarding and Modern C++ by Scott Meyers.
 
 In modern C++, we don't really use the "new" keyword very often. Instead, we
 use smart pointers, because they're easier to manage and don't require as much
-manual memory management. Raw pointers are the kinds of pointers we learned in CS101 coursework: manually managed memory (new, malloc, delete, etc). Other
+manual memory management. Raw pointers are the kinds of pointers we learned in
+CS coursework: manually managed memory (new, malloc, delete, etc). Other
 pointers that aren't "raw" are considered "smart" pointers, which "smartly
 manage themselves" via constructs automating memory management for them.
 
@@ -32,8 +33,11 @@ Speaking of copy semantics, an article on modern C++ and **Move Semantics** is
 included here [from Stack Overflow](http://stackoverflow.com/questions/3106110/what-are-move-semantics).
 It also covers information on L-Values and R-Values.
 
-
-These topics all relate to pointers regarding **access.** With inter-process communication (IPC) and inter-thread communication, controlled access is important for critical code sections / critical paths in order to avoid race conditions, so tools such as locks, mutexes, and semaphores are used to control access. I won't be covering most of that information here.
+These topics all relate to pointers regarding **access.** With inter-process
+communication (IPC) and inter-thread communication, controlled access is
+important for critical code sections / critical paths in order to avoid race
+conditions, so tools such as locks, mutexes, and semaphores are used to control
+access. I won't be covering most of that information here.
 
 
 | Pointer Type     | Memory management / access  | Notes |
@@ -72,10 +76,12 @@ Since exceptions alter the program control flow and using delete often depends
 on a particular fall-through/control flow, delete may never get called if an
 exception is caught and handled _before that delete can be called._
 
-All the more justification for not using raw pointers. **Use smart pointers. And if you do have to call delete, call it in a destructor.**
+All the more justification for not using raw pointers.
+**Use smart pointers. If you must use raw pointers, call delete in a destructor.**
 
 ##### Exception use cases
-- Thing happens -> exception handled -> recover, continue execution, or stop
+- Thing happens -> exception handled -> recover, continue execution
+(or exit failure)
 - Run time error conditions  
 - "Out of memory"
 - "File not Found"
@@ -86,18 +92,31 @@ All the more justification for not using raw pointers. **Use smart pointers. And
 - If you create your own class, inherit from std::exception. Study the
 UML diagrams for std::exception. [cpp reference](http://en.cppreference.com/w/cpp/error/exception)
 [tutorials point](https://www.tutorialspoint.com/cplusplus/cpp_exceptions_handling.htm)
-- You can throw bare integers or arrays but it's considered bad style; instead, throw some variation of std::exception.
+- You can throw bare integers or arrays but it's considered bad style; instead,
+throw some variation of std::exception. Subclass it.
 - If you absolutely have to use raw pointers, follow best practices and
 place delete calls in the destructor.
--
+- Validate input specifically: best practices
+"I/O errors are not exceptional." Try to use the inherent qualities - aka the
+virtual methods in istream base classes for cin subclass to validate input.
+This includes std::cin.fail(), std::cin.clear() bits, std::cin.ignore() clear
+buffers, and the istream >> operator doing type checking. See also, using
+std::isAlpha() to validate std::string types, and getopt to validate and
+parse command line args argc, argv.
 
 
 ### Use Error Codes for low-level system use cases requiring granularity
-Error codes are commonly used in C and COM programming for explicit handling of "every" possible situation, and detail-oriented low-level reporting.  Error codes return an integer data type. `"Exit 0" success` and `"Exit 1"  failure` are integer error codes that low level/Linux systems programmers are accustomed to seeing.
+Error codes are commonly used in C and COM programming for explicit handling of
+ "every" possible situation, and detail-oriented low-level reporting.  Error
+ codes return an integer data type. `"Exit 0" success` and `"Exit 1"  failure`
+ are integer error codes that low level/Linux systems programmers are accustomed
+ to seeing.
 
-Many C and COM programs also use globals to check error status after every function invocation and check it against the last stack push.
+Many C and COM programs also use globals to check error status after every
+function invocation and check it against the last stack push.
 
-Sometimes exceptions aren't always the answer (see "the exception that crashed an airline").
+Sometimes exceptions aren't always the answer (see "the exception that crashed
+an airline").
 
 ##### Error code use cases
 - Low level system calls return a type of abort/trap, and we want to know

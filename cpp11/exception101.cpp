@@ -2,9 +2,9 @@
 /* Algorithms with C++ Standard Library by Amanda Falke
 
 Compile:
-$ g++ exception101.cpp -std=c++11 -o cookies
+$ g++ exception101.cpp -std=c++11 -o whee
 Run:
-$ ./cookies
+$ ./whee
 
 ***** Basic Exception C++ Classes that subclass std::exception: *****
 
@@ -22,9 +22,13 @@ Type checking exception classes:
 
 ... and many more.
 
-***** What about validating cin input? *****
+***** What about validating argc, argv command line input? *****
+
+We use getopt to validate and parse command line args argc, argv.
 
 ***** What about validating cin input? *****
+
+We use getopt to validate and parse command line args argc, argv.
 
 Rather than using exceptions for I/O validation, we use the inherent
 qualities of the base class for streams.
@@ -118,9 +122,10 @@ void eatHealthy(int numCookies, std::string flavor)
 	}
 }
 
-/* We will validate input here for:
-- failbit / badbit cleared on cin before future use.
-- type checking for integer input type.
+/*
+- Clear failbit / badbit cleared on cin before future use.
+- Clear buffer
+- TODO: this should be a polymorphic input checker.
 */
 bool handleFlagsBuffer()
 {
@@ -179,8 +184,6 @@ int main()
 	int a = singleFunction();
 
 	howManyCookies();
-
-	std::cout<<"you did it ";
 
 	return 0;
 }

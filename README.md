@@ -61,3 +61,188 @@ std:anotherthing;
 | Exponential Time | O(n<sup>2</sup>)   | Terrible; an exponential curve. |
 | Power of 2       |  O(2<sup>n</sup>)  | Even worse than exponential. |
 | Bad Stuff        |  O(n 2<sup>n</sup>)| Nooooo. |
+
+
+## Data Structures with C++ Standard Library: A Practical Overview
+
+ADT = "Abstract Data Type"
+Data Structure = how the ADT is implemented
+
+-------*
+>>> Ordered associative containers / ADTs
+
+### Ordered Associative C++ Containers : Trees
+[link](http://en.cppreference.com/w/cpp/container)
+- Set (aka "HashSet")
+- MultiSet
+- Map (aka "HashMap")
+- Multimap
+
+
+#### Ordered ADTs/containers are implemented with red and black binary balanced trees to preserve order. O( <sub>log</sub>n)
+
+**Red and Black Trees:**
+- Linux Completely Fair Scheduler
+- RTOS applications
+
+
+C++ ordered associative containers such as std::set, ::multiset, ::map and ::multimap trees are almost always implemented with red-black trees. Red and black trees have a sign bit of sorts: 0 or 1 for red or black (or vice versa). Applications include **current Linux fair scheduler** and **RTOS applications.** This is logical because of the reliable ** <sub>log</sub>n performance.** Red and black trees have a bit representing color, and uses that to make reordering decisions very efficiently - sometimes with near-zero overhead.
+
+#### Container methods include
+
+std::set (and std::multiset)
+
+std::map (and std::multimap)
+
+| Method          | Description              |
+| ---------------- |:------------------:|
+| Compare()   | sort               |
+| empty() | boolean, checks empty          |
+| size() or maxsize() | current or potential size          |
+| insert() | add          |
+| emplace() | returns a pair, the element or one-after-end and boolean |
+| clear()   | deletes just the content               |
+| erase()   | deletes element itself               |
+| find()   | returns index or past-end-container index              |
+| count()   | returns num elements matching a key (for non-unique keys allowed, i.e. multi*) |
+| swap()   | ... |
+| upper_bound(), lower_bound()   | returns range-related elements, one before lower, one after upper if not .end() |
+| bucket_count()   | returns num buckets, would help with design of capacity/load factor |
+| hash_function()   | returns hash function |
+
+### ... all <sub>log</sub>n.
+
+###### Set Theory Review:
+- a Set has unique elements;
+- a MultiSet, or a Bag, has non-unique elements.
+- contains:
+Recall that the characteristic equation for a
+Set is contains().
+
+>> Use case contains: std :: set :: find()
+
+.find() worst case:
+
+ O( <sub>log</sub>n )
+
+find() method of std::set has a worst case O(log n)  because the set is already
+ ordered. That is not the case with unordered associative containers.
+
+Sets and MultiSets are implemented with trees because trees preserve order.
+Sometimes, having a O(1) (AVERAGE) case has a cost: it takes up more memory to
+construct, and constant time is not a guarantee.
+
+Performance for trees, worst case: `O(log n)` (binary!)
+
+That's pretty good.
+
+See also:
+
+- std::set
+- std::multiset
+
+-------*
+>>> Ordered associative containers / ADTs
+
+### Unordered Associative C++ Containers: HashMap
+[link](http://en.cppreference.com/w/cpp/container)
+- Unordered Set
+- Unordered MultiSet
+- Unordered Map (aka "Hash Table")
+- Unordered Multimap
+
+- Performance: ~ O(1) _search, insertion, removal_
+- rehashing destroys iterators
+
+#### Unordered ADTs/containers can be searched O (1) average case and O(n) worst case.
+
+Recall that "hash tables have a constant time average/amortized performance"
+O(1) for insertion, removal, etc.
+
+This complexity in performance is contextually dependent on various factors.
+Let's talk about **insertion.**
+
+**Hash Table Insertion: Usually O(1) but occasionally O(n)**
+
+One of the reasons that "hash tables are usually O(1), and sometimes O(n)" is
+because of the bucket restructuring that must occasionally take place (i.e.
+number of buckets need to be re-computed). This also happens with std::vector,
+that is, in the case that the underlying array needs to be re-allocated.
+So **std::vector insertion has the same issue.**
+
+##### Unordered ADTs/containers are implemented with hashing to prioritize performance, especially for lookup
+
+> Use case: std:: unordered_set:: find()
+
+**"Average case O(1). Worst case O(n)." WHOA!**
+
+[reference](http://en.cppreference.com/w/cpp/container/unordered_set/find)
+
+... That's quite the difference between constant time of 1 (excellent) and
+linear time of n (not bad, but not fantastic). Seems unpredictable, doesn't it?
+Isn't it true that O(log n) worst case of std :: set :: find() is always better
+in a worst case, and more predictable with performance? Yes, that's sorta true.
+
+> So sometimes, due to performance, you really will select a tree over a hashmap. This includes RTOS and time-sensitive, near-real time operations.
+
+...
+
+> Also, consider spatial complexity, not just temporal complexity. A balanced tree is much more compact than a hashmap, so with extremely large data sets we will recall that's when spatial complexity can become such an issue that temporal complexity is overshadowed.
+
+##### Design: HashMaps
+
+-
+
+
+## Items of common use in Standard Library
+- `std::emplace` is like a super-efficient insert operation that takes up
+less memory and time regarding move semantics and copying data/constructors.
+It creates the element in place. Given a use case of an `std::unordered_set`,
+`std::unordered_set::emplace(Key)` would iterate over the container,
+
+- `std::iterator` iterators over containers
+
+ **"If it's found, and not at the end, then it's in the container."**
+
+Looking to see if element in arr is already in hashyMap: "If you're not at the end of the container, you've found it!"
+```
+std::unordered_set<int> hashyMap;
+const std::array<int> arr;
+
+for( int value : arr)
+{
+	// if you're not at the end, you've found it!
+	if(hashyMap.find(value) != hashyMap.end())
+	{
+		return true;
+	}
+	hashyMap.emplace(key);
+}
+```
+
+- `std::atoi()` converts alpha to int
+
+- `std::typeid()` identifies types.
+
+ in: typeinfo
+
+ use: std::typeid(varName).name()
+
+- `std::isAlpha()` returns bool
+
+ in: locale lib
+ args: variable, locale var
+
+ check types of std::string's. Try using string::iterator with locale
+
+- `cin.fail()` returns true if failbits set on istream object
+- `cin.clear()` clears failbits on istream object
+- `cin.ignore()` clears buffer of istream object
+
+- `std:: iterators` super cool
+
+- `std::accumulate` : use in a single line statement with containers to accumulate values
+
+ use: `int sum = std::accumulate(v.begin(),v.end());`
+
+- `std::transform` apply the same function to an entire range
